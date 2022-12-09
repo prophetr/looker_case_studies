@@ -2,7 +2,7 @@
 view: users {
   # The sql_table_name parameter indicates the underlying database table
   # to be used for all fields in this view.
-  sql_table_name: `thelook.users`
+  sql_table_name: `looker-partners.thelook.users`
     ;;
   drill_fields: [id]
   # This primary key is the unique key for this table in the underlying database.
@@ -27,15 +27,6 @@ view: users {
   # measures for this dimension, but you can also add measures of many different aggregates.
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
-  measure: total_age {
-    type: sum
-    sql: ${age} ;;
-  }
-
-  measure: average_age {
-    type: average
-    sql: ${age} ;;
-  }
 
   dimension: city {
     type: string
@@ -117,6 +108,6 @@ view: users {
 
   measure: count {
     type: count
-    drill_fields: [id, last_name, first_name, events.count, order_items.count]
+    drill_fields: [id, last_name, first_name, order_items.count, events.count]
   }
 }
