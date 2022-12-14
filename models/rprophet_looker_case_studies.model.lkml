@@ -9,10 +9,14 @@ include: "/explores/**/*.explore"
 # use the Quick Help panel on the right to see documentation.
 
 datagroup: rprophet_looker_case_studies_default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
+  sql_trigger: select current_date();;
+  max_cache_age: "24 hours"
 }
 
+datagroup: order_items {
+  sql_trigger: select max(created_at) from order_items ;;
+  max_cache_age: "4 hours"
+}
 persist_with: rprophet_looker_case_studies_default_datagroup
 
 # Explores allow you to join together different views (database tables) based on the
@@ -57,5 +61,3 @@ explore: inventory_items {
     relationship: many_to_one
   }
 }
-
-explore: users {}

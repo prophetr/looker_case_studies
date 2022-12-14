@@ -1,9 +1,18 @@
 include: "/views_refined/refined_order_items.view.lkml"
 include: "/views_refined/refined_users.view.lkml"
-include: "/views_raw/inventory_items.view.lkml"
-include: "/views_raw/products.view.lkml"
+include: "/views_refined/refined_inventory_items.view.lkml"
+include: "/views_refined/refined_products.view.lkml"
 include: "/views_refined/refined_distribution_centers.view.lkml"
+
+persist_with: order_items
+
 explore: order_items {
+  description: "Order Items that have not been returned and are >$200"
+  always_filter: {
+    filters: [order_items.created_date: "last 30 days"]
+  }
+  sql_always_where: ${returned_date} is null ;;
+  sql_always_having: ${total_sale_price} > 200 ;;
   join: users {
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;

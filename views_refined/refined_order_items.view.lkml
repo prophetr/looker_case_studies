@@ -113,6 +113,12 @@ measure: percentage_sales_email_source {
   value_format_name: percent_2
 }
 
+measure: average_spend_per_user {
+  type: number
+  value_format_name: usd
+  sql: 1.0*${total_sale_price}/NULLIF(${users.count},0) ;;
+}
+
 dimension_group: shipped {
   type: time
   timeframes: [
@@ -129,6 +135,25 @@ dimension_group: shipped {
 
 dimension: user_id {
 
+}
+
+dimension: order_status {
+  type: string
+  sql: case
+        when ${created_date} is not null
+          and ${delivered_date} is null
+          and ${returned_date} is null
+          and ${shipped_date} is null then 'Created'
+        when ${created_date} is not null
+          and ${delivered_date} is null
+          and ${returned_date} is null
+          and ${shipped_date} is not null then "Shipped"
+        when ${created_date} is not null
+          and ${delivered_date} is not null
+          and ${returned_date} is null
+          and ${shipped_date} is not null then "Complete"
+        when ${returned_date} is not null then "Returned"
+        end;;
 }
 
 measure: count {
